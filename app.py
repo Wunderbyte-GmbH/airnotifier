@@ -40,6 +40,10 @@ import pymongo
 import sentry_sdk
 
 
+MONGO_USER = os.getenv("MONGO_USER", "default_user")
+MONGO_PASS = os.getenv("MONGO_PASS", "default_pass")
+MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASS}@localhost:27017/?authSource=admin"
+
 define("appprefix", default="", help="DB name prefix")
 define("collectionprefix", default="obj_", help="Collection name prefix")
 define("cookiesecret", default="airnotifiercookiesecret", help="Cookie secret")
@@ -75,7 +79,8 @@ if __name__ == "__main__":
     mongodb = None
     while not mongodb:
         try:
-            mongodb = pymongo.MongoClient(options.mongouri)
+            #mongodb = pymongo.MongoClient(options.mongouri)
+             mongodb = pymongo.MongoClient(MONGO_URI)
         except:
             logging.error("Cannot not connect to MongoDB")
 

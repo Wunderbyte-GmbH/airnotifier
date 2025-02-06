@@ -36,12 +36,16 @@ import logging
 import pymongo
 import tornado.options
 
+MONGO_USER = os.getenv("MONGO_USER", "default_user")
+MONGO_PASS = os.getenv("MONGO_PASS", "default_pass")
+MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASS}@localhost:27017/?authSource=admin"
+
 
 EMAIL = "admin@airnotifier"
 DEFAULTPASSWORD = "admin"
 
 define("masterdb", default="airnotifier", help="MongoDB DB to store information")
-define("mongouri", default="mongodb://localhost:27017/", help="MongoDB host name")
+#define("mongouri", default="mongodb://localhost:27017/", help="MongoDB host name")
 EMAIL = "admin@airnotifier"
 DEFAULTPASSWORD = "admin"
 
@@ -58,7 +62,8 @@ if __name__ == "__main__":
 
     tornado.options.parse_config_file("config.py")
     tornado.options.parse_command_line()
-    mongodb = pymongo.MongoClient(options.mongouri)
+    #mongodb = pymongo.MongoClient(options.mongouri)
+    mongodb = pymongo.MongoClient(MONGO_URI)
     masterdb = mongodb[options.masterdb]
 
     collection_names = masterdb.list_collection_names()
